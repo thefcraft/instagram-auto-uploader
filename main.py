@@ -126,7 +126,7 @@ def index():
 
 def main():
     global output, temp_num 
-    bot = instagram_uploder(username='daily.quotes.bot', password='laksh002005')
+    bot = instagram_uploder(username='daily.quotes.bot', password='')
     while True:
         output = ''
         temp_num += 1
