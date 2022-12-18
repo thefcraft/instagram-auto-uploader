@@ -146,6 +146,6 @@ def main():
             sleep(3600)
 
 if __name__ == '__main__':
-    x = threading.Thread(target=main, daemon=True)
-    x.start()
-    app.run()
+    #x = threading.Thread(target=main, daemon=True)
+    #x.start()
+    #app.run()
