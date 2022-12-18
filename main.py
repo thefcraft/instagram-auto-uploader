@@ -8,6 +8,8 @@ from instabot import Bot
 import os
 from time import sleep
 
+
+
 class image_generator():
     def __init__(self, width=1080, height=1350):                
         #1080px by 1080px (Square) 
@@ -103,24 +105,47 @@ class instagram_uploder():
         #with client(username, password) as cli: 
             #cli.upload(image_path, time+'\n'+text)    
         self.bot.upload_photo(image_path, caption = time+'\n'+text)
-        
+
 def cleaner():
     filepath = "main.jpg.REMOVE_ME"
     if os.path.exists(filepath): os.remove(filepath)
 
-bot = instagram_uploder(username='daily.quotes.bot', password='')
-while True:
-    try:
-        image = image_generator()
-        image.save("main.jpg")
-        bot.upload()
-        cleaner()
-    except Exception as e:
-        with open('main.log', 'a') as f:
-            time = str(datetime.utcnow())
-            time = f"UTC Time: {time}"
-            f.write(f'{time}: A Error is occurred "{str(e)}"')
-            f.write('\n')
-    finally:
-        break
-        sleep(3600)
+from flask import Flask
+import threading
+# basic_flask_server
+app = Flask(__name__)
+
+output = ''
+temp_num = 0
+
+@app.route('/')
+def index():
+    time = str(datetime.utcnow())
+    time = f"UTC Time: {time}"
+    return f'I am Alive\nTime is {time} and output is "{str(output)}"\nTemp num is {temp_num}'
+
+def main():
+    global output, temp_num 
+    bot = instagram_uploder(username='daily.quotes.bot', password='laksh002005')
+    while True:
+        output = ''
+        temp_num += 1
+        try:
+            image = image_generator()
+            image.save("main.jpg")
+            bot.upload()
+            cleaner()
+        except Exception as e:
+            with open('main.log', 'a') as f:
+                time = str(datetime.utcnow())
+                time = f"UTC Time: {time}"
+                f.write(f'{time}: A Error is occurred "{str(e)}"')
+                f.write('\n')
+                output = f'{time}: A Error is occurred "{str(e)}"'
+        finally:
+            sleep(3600)
+
+if __name__ == '__main__':
+    x = threading.Thread(target=main, daemon=True)
+    x.start()
+    app.run()
