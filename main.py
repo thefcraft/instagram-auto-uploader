@@ -112,7 +112,7 @@ while True:
         image = image_generator()
         image.save("main.jpg")
         cleaner()
-        instagram_uploder(username='daily.quotes.bot', password='laksh002005')
+        instagram_uploder(username='daily.quotes.bot', password='')
     except Exception as e:
         with open('main.log', 'a') as f:
             time = str(datetime.utcnow())
