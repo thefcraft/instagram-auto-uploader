@@ -92,27 +92,29 @@ class image_generator():
         for o in messageA: message_final += o + "\n"
         return message_final
 
-def instagram_uploder(username, password, image_path = 'main.jpg', text = 'Posted by a bot' + '\r\n' + '#ThefCraft #pythondeveloper'):
-    
-    time = str(datetime.utcnow())
-    time = f"UTC Time: {time[:time.find('.')]}"
+class instagram_uploder():
+    def __init__(self, username, password):
+        self.bot = Bot()
+        self.bot.login(username = username, password = password)
 
-    #with client(username, password) as cli: 
-        #cli.upload(image_path, time+'\n'+text)    
-    bot = Bot()
-    bot.login(username = username, password = password)
-    bot.upload_photo(image_path, caption = time)#+'\n'+text)
-
+    def upload(self, image_path = 'main.jpg', text = 'Posted by a bot' + '\r\n' + '#ThefCraft #pythondeveloper'):
+        time = str(datetime.utcnow())
+        time = f"UTC Time: {time[:time.find('.')]}"
+        #with client(username, password) as cli: 
+            #cli.upload(image_path, time+'\n'+text)    
+        self.bot.upload_photo(image_path, caption = time+'\n'+text)
+        
 def cleaner():
     filepath = "main.jpg.REMOVE_ME"
     if os.path.exists(filepath): os.remove(filepath)
 
+bot = instagram_uploder(username='daily.quotes.bot', password='')
 while True:
     try:
         image = image_generator()
         image.save("main.jpg")
+        bot.upload()
         cleaner()
-        instagram_uploder(username='daily.quotes.bot', password='')
     except Exception as e:
         with open('main.log', 'a') as f:
             time = str(datetime.utcnow())
